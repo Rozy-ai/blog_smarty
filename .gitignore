@@ -1,0 +1,7 @@
+/vendor/
+/.env
+/storage/cache/*
+/storage/compile/*
+/storage/logs/*
+/assets/css/*
+!.gitkeep
