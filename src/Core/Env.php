@@ -36,6 +36,10 @@ final class Env
             $key = trim($key);
             $value = trim($value);
 
+            if (getenv($key) !== false) {
+                continue;
+            }
+
             $_ENV[$key] = $value;
             putenv($key . '=' . $value);
         }

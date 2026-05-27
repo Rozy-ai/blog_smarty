@@ -1,6 +1,6 @@
 # Тестовое задание: PHP + Smarty + MySQL блог
 
-Полностью рабочий блог на чистом PHP без фреймворков.
+Простой блог на чистом PHP без фреймворков, с MySQL и шаблонизатором Smarty.
 
 ## Что реализовано
 
@@ -19,28 +19,42 @@
 - Сидинг:
   - создание таблиц;
   - заполнение тестовыми категориями и статьями.
+- Дополнительно:
+  - Docker-окружение;
+  - SCSS-исходник для стилей;
+  - Makefile для быстрых команд запуска.
 
 ## Стек
 
 - PHP 8.1+
 - Smarty
 - MySQL
-- Docker 
-- SCSS 
+- Docker
+- SCSS
 
-Запуск встроенного PHP-сервера:
+## Быстрый запуск через Makefile
 
 ```bash
-php -S localhost:8080 -t public
+make install
+make up
+make seed
 ```
 
-Откройте: [http://localhost:8080](http://localhost:8080)
+Сайт будет доступен по адресу: [http://localhost:8080](http://localhost:8080)
 
----
+Полезные команды:
 
-## Запуск через Docker
+```bash
+make help
+make ps
+make logs
+make down
+make local-serve
+```
 
-1. Зависимости на хосте (один раз, без образа `composer`):
+## Запуск через Docker без Makefile
+
+1. Установить зависимости:
 
 ```bash
 composer install
@@ -52,15 +66,80 @@ composer install
 docker compose up -d --build
 ```
 
-3. В контейнере `.env` не нужен для БД — в `docker-compose.yml` уже заданы переменные. Сидинг:
+3. Запустить сидинг:
 
 ```bash
 docker compose exec app php database/seed.php
 ```
 
-4. Сайт: [http://localhost:8080](http://localhost:8080)
+4. Открыть сайт: [http://localhost:8080](http://localhost:8080)
 
-MySQL снаружи контейнера: порт **3307** → `127.0.0.1:3307`, логин `blog` / пароль `blog`, БД `blog`.
+MySQL снаружи контейнера доступен на `127.0.0.1:3307`.
+
+Доступы Docker-БД:
+
+```text
+database: blog
+user: blog
+password: blog
+```
+
+Если Docker Hub временно не скачивает образ `php:8.3-apache`, можно сначала выполнить:
+
+```bash
+docker pull php:8.3-apache
+```
+
+и затем повторить `docker compose up -d --build`.
+
+## Запуск без Docker
+
+Для локального запуска нужны PHP 8.1+, Composer и доступная MySQL-БД.
+
+1. Создать `.env`:
+
+```bash
+cp .env.example .env
+```
+
+2. Указать в `.env` локальные доступы к MySQL, например:
+
+```env
+APP_ENV=local
+APP_URL=http://localhost:8080
+
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=blog
+DB_USER=root
+DB_PASSWORD=
+```
+
+3. Установить зависимости:
+
+```bash
+composer install
+```
+
+4. Создать таблицы и тестовые данные:
+
+```bash
+php database/seed.php
+```
+
+или
+
+```bash
+composer seed
+```
+
+5. Запустить встроенный PHP-сервер:
+
+```bash
+php -S localhost:8080 -t public
+```
+
+Сайт: [http://localhost:8080](http://localhost:8080)
 
 ## Структура
 
@@ -75,17 +154,13 @@ MySQL снаружи контейнера: порт **3307** → `127.0.0.1:3307
 
 ## Команды
 
-- сидинг:
-
 ```bash
-php database/seed.php
+make help
+make lint
+make seed
+make local-seed
 ```
 
-или
+## Использование ИИ
 
-```bash
-composer seed
-```
-
-
-Тексты и статьи сделаны с помощью ИИ
+При выполнении задания использовался ИИ как помощник для проверки структуры проекта, формулировки README, подготовки тестовых данных и ускорения рутинных правок. Архитектура проекта, разбор требований, интеграция PHP/MySQL/Smarty и финальная проверка решения выполнялись осознанно с пониманием кода.
