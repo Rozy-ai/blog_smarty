@@ -78,7 +78,8 @@ final class ArticleRepository
     public function incrementViews(int $id): void
     {
         $stmt = $this->pdo->prepare('UPDATE articles SET views = views + 1 WHERE id = :id');
-        $stmt->execute(['id' => $id]);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     public function similarByCategoryIds(array $categoryIds, int $excludeId, int $limit = 3): array

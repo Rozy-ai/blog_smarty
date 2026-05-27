@@ -17,6 +17,10 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 Env::load(dirname(__DIR__) . '/.env');
 $config = require dirname(__DIR__) . '/src/Config/config.php';
 
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('Expires: 0');
+
 $pdo = Database::make($config['db']);
 $view = new View($config['paths']);
 

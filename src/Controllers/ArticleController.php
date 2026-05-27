@@ -18,7 +18,6 @@ final class ArticleController
     public function show(string $id): void
     {
         $articleId = (int) $id;
-        $this->articles->incrementViews($articleId);
         $article = $this->articles->findWithCategories($articleId);
 
         if (!$article) {
@@ -26,6 +25,9 @@ final class ArticleController
             echo 'Article not found';
             return;
         }
+
+        $this->articles->incrementViews($articleId);
+        $article['views'] = (int) $article['views'] + 1;
 
         $categoryIds = array_map(
             static fn (array $cat): int => (int) $cat['id'],

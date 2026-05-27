@@ -86,3 +86,6 @@ php database/seed.php
 ```bash
 composer seed
 ```
+
+
+Тексты и статьи сделаны с помощью ИИ
